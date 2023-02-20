@@ -1,6 +1,6 @@
 This is a work in progress. Only for the 24V 1000W soyo inverter with LCD. The lcd-less type use other messages. Absolutely no liability. Your fuckups are your problem.
 
-Serial console tells you where to connect. And use your own wifi credentials, not mine.
+Serial console tells you where to connect. Something like "http://192.168.178.67/" in your browser. And use your own wifi credentials, not mine.
 
 Connect soyosource rx and tx via a 10kohm resistor to the esp8266 Tx = GPIO15, Rx = GPIO13.
 
