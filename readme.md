@@ -13,10 +13,14 @@ That cable:
 
 I do not remember which cable pins are what signal, find it yourself. 
 
-Should look like:
+Main screen:
 
 ![Clipboard02.jpg](Clipboard02.jpg "Hi")
 
+Settings screen, press "read values" to see:
+
 ![Clipboard03.jpg](Clipboard03.jpg "Hi")
+
+Graph screen, red=volt, green=amps, magenta=power:
 
 ![Clipboard01.jpg](Clipboard01.jpg "Hie")
