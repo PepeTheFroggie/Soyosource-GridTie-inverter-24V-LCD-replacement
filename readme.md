@@ -4,7 +4,8 @@ Serial console tells you where to connect. And use your own wifi credentials, no
 
 Connect soyosource rx and tx via a 10kohm resistor to the esp8266 Tx = GPIO15, Rx = GPIO13.
 
-![images.jpg](images.jpg "This cable")
-
+This pins:
 ![wiring.png](wiring.png "This way")
 
+That cable:
+![images.jpg](images.jpg "This cable")
