@@ -11,3 +11,7 @@ That cable:
 
 ![images.jpg](images.jpg "This cable")
 
+I do not remember which cable pins are what signal, find it yourself. 
+
+Should look like:
+![Clipboard01.jpg](Clipboard01.jpg "This cable")
