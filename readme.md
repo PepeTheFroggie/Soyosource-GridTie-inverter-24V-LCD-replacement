@@ -1,4 +1,4 @@
-This is a work in progress. Onyl for the 24V 1000W soyo inverter with LCD. The lcd-less type use other messages. Absolutely no liability. Your fuckups are your problem.
+This is a work in progress. Only for the 24V 1000W soyo inverter with LCD. The lcd-less type use other messages. Absolutely no liability. Your fuckups are your problem.
 
 Serial console tells you where to connect. And use your own wifi credentials, not mine.
 
