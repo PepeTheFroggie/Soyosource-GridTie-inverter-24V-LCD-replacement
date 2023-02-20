@@ -14,4 +14,6 @@ That cable:
 I do not remember which cable pins are what signal, find it yourself. 
 
 Should look like:
-![Clipboard01.jpg](Clipboard01.jpg "This cable")
+![Clipboard02.jpg](Clipboard02.jpg "Hi")
+![Clipboard03.jpg](Clipboard03.jpg "Hi")
+![Clipboard01.jpg](Clipboard01.jpg "Hie")
