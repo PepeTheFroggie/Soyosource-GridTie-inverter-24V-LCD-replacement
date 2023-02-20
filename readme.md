@@ -1,4 +1,4 @@
-This is a work in progress.
+This is a work in progress. Absolutely no liability. Your fuckups are your problem.
 
 Serial console tells you where to connect. And use your own wifi credentials, not mine.
 
@@ -24,3 +24,7 @@ Settings screen, press "read values" to see:
 Graph screen, red=volt, green=amps, magenta=power:
 
 ![Clipboard01.jpg](Clipboard01.jpg "Hie")
+
+Good luck. If you find improvements please notify.
+
+Do not use "Bat power" setting for dynamic adjustments, this will fuck up your eeprom. There might be a special message for dynamic power setting but i have not tested that. 
