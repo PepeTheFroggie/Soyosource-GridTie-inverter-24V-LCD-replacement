@@ -1,3 +1,6 @@
+Soyosource-GridTie-inverter 1000W 24V LCD replacement
+-----------------------------------------------------
+
 This is a work in progress. Only for the 24V 1000W soyo inverter with LCD. The lcd-less type use other messages. Absolutely no liability. Your fuckups are your problem. DO NOT have the serial programming cable connected when the soyo is connected to the grid! Use the OTA "wifi upload" feature to change firmware.
 
 Serial console tells you where to connect. Something like "http://192.168.178.67/" in your browser. And use your own wifi credentials, not mine.
