@@ -12,7 +12,9 @@ That cable:
 ![images.jpg](images.jpg "This cable")
 
 Pic of which cable pins are what signal. 
+
 DO NOT TRUST IT! Measure 5V and Gnd yourself! 
+
 Especially Rx/Tx may well be swapped.
 ![IMG_20230222_160450.png](IMG_20230222_160450.png "Hi")
 
