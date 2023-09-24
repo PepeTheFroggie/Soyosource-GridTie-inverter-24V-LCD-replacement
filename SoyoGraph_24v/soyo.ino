@@ -92,7 +92,7 @@ byte chksum_se(byte * data)
 // b2 stopvolt = 0.1V
 // bp batpower in 10W
 // bs 2=bat pow, 1= pv
-// id 01=norm, 02 modeset, 0A=batset, 12=powerset
+// id 01=norm, 02 modeset, 03 limiter, 0A=batset, 12=powerset
 
 byte chksum_es(byte * data)
 {
@@ -108,6 +108,15 @@ byte chksum_es(byte * data)
 //55 0A FD 03 00 F4 battery end volt 3 
 //55 12 02 00 00 EB battery power 20W
 
+// Limiter ?
+// 55:03:17:18:02:CB # Constant power mode
+// 55:03:23:64:01:74 # off
+// 55:03:23:64:10:65 # Limiter mode
+
+// bat max power
+//Set Bat CP Mode Power to 40W  >>> 55:13:04:64:00:84
+//Set Bat CP Mode Power to 600W >>> 55:13:3C:64:00:4C
+
 void msg_esp_soyo(byte com)
 {
   es[0]  = 0x55; // sync
@@ -120,11 +129,23 @@ void msg_esp_soyo(byte com)
   }
   else if (com == 0x02) // mode
   {
-    es[2]  = 0;
+    es[2]  = 2;
     es[3]  = 0;
     if (batmode) es[4] = 2; // 01=PV 02=Bat
     else         es[4] = 1;
-    if (limit)   es[4] += 0x10;
+  }
+  else if (com == 0x03) // mode
+  {
+    es[2]  = 0;
+    es[3]  = 0;
+    if (limit) es[4] = 0x10;
+    //if (off) es[4] = 1; // 01=PV 02=Bat
+    //if (constantpower) es[4] = 2; // 01=PV 02=Bat
+    else 
+    {
+      if (batmode) es[4] = 2; // 01=PV 02=Bat
+      else         es[4] = 1;
+    }
   }
   else if (com == 0x0A) // bat
   {
@@ -139,4 +160,23 @@ void msg_esp_soyo(byte com)
     es[4]  = 0;
   }
   es[5] = chksum_es((byte*)&es);
+}
+
+byte chksum_lim(byte * data)
+{
+  byte cs = 0;
+  for (int i=1;i<=7;i++) cs+=data[i];
+  return 0xFF - cs;
+}
+
+void sendlimit(uint16_t pwrval)
+{
+  lim[0] = 36;
+  lim[1] = 86;
+  lim[2] = 0;
+  lim[3] = 33;
+  lim[4] = pwrval>>8;
+  lim[5] = pwrval&0xFF;
+  lim[6] = 128;
+  lim[7] = chksum_lim((byte*)&lim);  
 }

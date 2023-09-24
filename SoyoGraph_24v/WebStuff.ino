@@ -14,13 +14,13 @@ void handleSettings()
     if      (server.argName(i) == "rd")  IsRead = true;  
     else if (server.argName(i) == "wb")  IsBat  = true;  
     else if (server.argName(i) == "wp")  IsPow  = true;  
-    else if (server.argName(i) == "BatStartV") sd.startvolt = server.arg(i).toInt();
-    else if (server.argName(i) == "BatStopV")  sd.stopvolt  = server.arg(i).toInt();
-    else if (server.argName(i) == "BatPowerW") sd.bat_power = server.arg(i).toInt();
-    else if (server.argName(i) == "bat") batmode = true;  
-    else if (server.argName(i) == "pv")  batmode = false;  
-    else if (server.argName(i) == "lim") limit = true;  
-    else if (server.argName(i) == "nli") limit = false;  
+    else if (server.argName(i) == "BatStartV") sd.startvolt = server.arg(i).toInt(); 
+    else if (server.argName(i) == "BatStopV")  sd.stopvolt  = server.arg(i).toInt(); 
+    else if (server.argName(i) == "BatPowerW") sd.bat_power = server.arg(i).toInt(); 
+    else if (server.argName(i) == "bat") {batmode = true;  IsRead = true;}
+    else if (server.argName(i) == "pv")  {batmode = false; IsRead = true;}
+    else if (server.argName(i) == "lim") {limit   = true;  IsLim = true;}
+    else if (server.argName(i) == "nli") {limit   = false; IsLim = false;}
   }
 
   out += "<body><center>";
@@ -39,7 +39,7 @@ void handleSettings()
   out += "<br>\n";
     
   out += "<form action=\"/settings\">\n";
-  out += "Bat start Volt : ";
+  out += "Bat restart Volt : ";
   sprintf(temp,"<input type=\"number\" name=\"BatStartV\" value=%d><br>\n",sd.startvolt);
   out += temp;
   out += "Bat stop Volt : ";
@@ -78,10 +78,12 @@ void getData()
 {
   String out;
   char temp[400];
+  
+  DoLimit = false;
 
   out = "<html>\
          <head>\
-           <meta http-equiv='refresh' content='20'/>\
+           <meta http-equiv='refresh' content='15'/>\
            <title>SoyoPower</title>\
          </head>";
   out += "<body>\
@@ -96,8 +98,17 @@ void getData()
   out += temp;
   sprintf(temp,"power %d W<br><br>\n",(int)(sd.V_input*sd.A_input));
   out += temp;
-  sprintf(temp,"opmode %x <br>\n",sd.opmode>>4);
+  sprintf(temp,"opmode %x ",sd.opmode>>4);
   out += temp;
+  // 8 limiter
+  // C limiter + stdby
+  if      (sd.opmode>>4 == 1) out += "bat<br>\n";
+  else if (sd.opmode>>4 == 2) out += "pv<br>\n";
+  else if (sd.opmode>>4 == 5) out += "bat stdby<br>\n";
+  else if (sd.opmode>>4 == 6) out += "pv stdby<br>\n";
+  else if (sd.opmode>>4 == 8) out += "limiter<br>\n";
+  else if (sd.opmode>>4 ==12) out += "limit standby<br>\n";
+  else out += "<br>\n";
   sprintf(temp,"frame %x <br>\n",sd.opmode&0x0F);
   out += temp;
   sprintf(temp,"status %x <br>\n",sd.errstat);
@@ -119,6 +130,8 @@ void getData()
   out += "<a href='/pwr.svg'>Graph</a>";
   out += "<br><br>\n";
   out += "<a href='/up'>Upload</a>";
+  out += "<br><br>\n";
+  out += "<a href='/limit'>Limiter</a>";
   out += "<br><br>\n";
   
   sprintf(temp,"%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x<br>\n",se[1],se[2],se[3],se[4],se[5],se[6],se[7],se[8],se[9],se[10],se[11],se[12],se[12]); 
@@ -206,4 +219,25 @@ void drawGraph()
   out += "</svg>\n";
   
   server.send(200, "image/svg+xml", out);
+}
+
+void limiter() 
+{
+  String out;
+  char temp[40];
+
+  DoLimit = true;
+  
+  out += "<body><center>";
+            
+  out += "<h1>Limiter</h1>";         
+  out += "<br>\n";
+
+  out += "Limiter to 80W<br><br>\n"; 
+
+  out += "<a href='/'>Back</a>";
+  out += "<br><br>\n";
+
+  out += "</center></body></html>";
+  server.send(200, "text/html", out);
 }

@@ -6,6 +6,10 @@
 #include <time.h>                  
 #include "soyo.h"
 
+#include <SoftwareSerial.h>
+#define txpin 12// gpio12
+SoftwareSerial mySerial(-1, txpin); // RX, TX
+
 // http://192.168.178.67/
 
 ESP8266WebServer server(80);
@@ -33,6 +37,11 @@ void setup()
   pinMode(led, OUTPUT);
   digitalWrite(led, LOW);
 
+  pinMode(txpin, OUTPUT);
+  mySerial.enableRx(false);
+  mySerial.begin(4800); 
+  mySerial.println("Hi ");   
+
   Serial.begin(9600);
   Serial.println();  
   Serial.println("Start");
@@ -47,12 +56,12 @@ void setup()
   }
   Serial.println(" connected to WiFi");
   Serial.println(WiFi.localIP());
-  wifi_set_sleep_type(NONE_SLEEP_T);
 
   httpUpdater.setup(&server,"/up"); 
   server.on("/", getData);
   server.on("/settings", handleSettings);
   server.on("/pwr.svg", drawGraph);
+  server.on("/limit", limiter);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.println("HTTP server started");
@@ -78,11 +87,15 @@ byte inmsg[15];
 bool IsRead;
 bool IsBat;
 bool IsPow;
+bool IsLim;
+bool DoLimit;
 
 #define storeinterval 30 // 30 sec, 6h
 time_t nextStoreTime = storeinterval;
 #define msginterval 3
 time_t nextmsg = msginterval;
+#define limitinterval 1
+time_t nextlimit = limitinterval;
 
 void loop() 
 {
@@ -122,6 +135,12 @@ void loop()
     msg_esp_soyo(0x02);
     Serial.write(es,6);
   }
+  else if (IsLim)
+  {
+    IsLim = false;
+    msg_esp_soyo(0x03);
+    Serial.write(es,6);
+  } 
   else if (IsBat)
   {
     IsBat = false;
@@ -134,6 +153,16 @@ void loop()
     msg_esp_soyo(0x12);
     Serial.write(es,6);
   } 
+  else if (DoLimit)
+  {
+    time(&now); // read the current time
+    if (now >= nextlimit)
+    {
+      nextlimit = now + limitinterval; 
+      sendlimit(80);   
+      mySerial.write(lim,8);
+    }
+  }
   else 
   {
     time(&now); // read the current time

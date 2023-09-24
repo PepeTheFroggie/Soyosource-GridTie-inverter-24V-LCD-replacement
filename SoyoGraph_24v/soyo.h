@@ -47,3 +47,4 @@ bool limit;
 // batpow in 10W step
 
 byte es[6]; 
+byte lim[8];
