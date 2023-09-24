@@ -5,9 +5,9 @@ This is a work in progress. Only for the 24V 1000W soyo inverter with LCD. The l
 
 Serial console tells you where to connect. Something like "http://192.168.178.67/" in your browser. And use your own wifi credentials, not mine.
 
-Connect soyosource rx and tx via a 10kohm resistor to the esp8266 Tx = GPIO15, Rx = GPIO13. Or 1kohm, idk.
+Connect soyosource rx and tx via a 10kohm resistor to the esp8266 Tx = GPIO15, Rx = GPIO13. Or 1kohm, idk, its for adapting the esp 3.3V to the soyo 5V.
 
-GPIO 12 will be used for limiter later. This will be softserial TX only at 4800 baud. Connection goes to where the RS485 board was installed, 5-pin socket, pins have white marking.
+GPIO 12 will be used for limiter later. This will be softserial TX only at 4800 baud. Connection goes to RX where the RS485 board was installed, 5-pin socket, pins have white marking.
 
 This pins:
 ![wiring.png](wiring.png "This way")
