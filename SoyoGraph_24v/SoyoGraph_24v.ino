@@ -159,7 +159,7 @@ void loop()
     if (now >= nextlimit)
     {
       nextlimit = now + limitinterval; 
-      sendlimit(80);   
+      sendlimit(sd.limit_power);   
       mySerial.write(lim,8);
     }
   }

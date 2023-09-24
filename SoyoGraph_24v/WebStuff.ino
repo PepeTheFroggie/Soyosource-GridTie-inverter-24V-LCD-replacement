@@ -12,11 +12,9 @@ void handleSettings()
   for (uint8_t i = 0; i < server.args(); i++)
   {
     if      (server.argName(i) == "rd")  IsRead = true;  
-    else if (server.argName(i) == "wb")  IsBat  = true;  
-    else if (server.argName(i) == "wp")  IsPow  = true;  
-    else if (server.argName(i) == "BatStartV") sd.startvolt = server.arg(i).toInt(); 
-    else if (server.argName(i) == "BatStopV")  sd.stopvolt  = server.arg(i).toInt(); 
-    else if (server.argName(i) == "BatPowerW") sd.bat_power = server.arg(i).toInt(); 
+    else if (server.argName(i) == "BatStartV") {sd.startvolt=server.arg(i).toInt(); IsBat=true;} 
+    else if (server.argName(i) == "BatStopV")  {sd.stopvolt =server.arg(i).toInt(); IsBat=true;}
+    else if (server.argName(i) == "BatPowerW") {sd.bat_power=server.arg(i).toInt(); IsPow=true;}
     else if (server.argName(i) == "bat") {batmode = true;  IsRead = true;}
     else if (server.argName(i) == "pv")  {batmode = false; IsRead = true;}
     else if (server.argName(i) == "lim") {limit   = true;  IsLim = true;}
@@ -28,9 +26,9 @@ void handleSettings()
   out += "<h1>Soyo Settings</h1>";         
   out += "<br>\n";
   
-  sprintf(temp,"devmodel %d <br>\n",sd.dev_model);
+  sprintf(temp,"devmodel %d &nbsp\n",sd.dev_model);
   out += temp;
-  sprintf(temp,"devbatvolt %d <br>\n",sd.dev_type);
+  sprintf(temp,"devbatvolt %d <br><br>\n",sd.dev_type);
   out += temp;
   if (batmode) out += "Bat mode<br>\n";
   else         out += "PV mode<br>\n";
@@ -40,25 +38,24 @@ void handleSettings()
     
   out += "<form action=\"/settings\">\n";
   out += "Bat restart Volt : ";
-  sprintf(temp,"<input type=\"number\" name=\"BatStartV\" value=%d><br>\n",sd.startvolt);
+  sprintf(temp,"<input type=\"number\" name=\"BatStartV\" value=%d>&nbsp\n",sd.startvolt);
   out += temp;
+  out += "<input type=\"submit\" value=\"Write Bat Volt\">&nbsp\n";
   out += "Bat stop Volt : ";
   sprintf(temp,"<input type=\"number\" name=\"BatStopV\" value=%d><br>\n",sd.stopvolt);
   out += temp;
-  out += "Bat Power W: ";
-  sprintf(temp,"<input type=\"number\" name=\"BatPowerW\" value=%d><br>\n",sd.bat_power);
+  out += "</form>\n";
+  out += "<form action=\"/settings\">\n";
+  out += "Bat Power Watt: ";
+  sprintf(temp,"<input type=\"number\" name=\"BatPowerW\" step=\"10\" value=%d>&nbsp\n",sd.bat_power);
   out += temp;
-  out += "<input type=\"submit\" value=\"Submit\"><br>\n";
+  out += "<input type=\"submit\" value=\"Write Power\"><br>\n";
   out += "</form>\n";
   sprintf(temp,"startdelay %d <br>\n",sd.delaysec);
   out += temp;
   out += "<br>\n";
 
   out += "<button onclick=\"window.location.href='/settings?rd=1\';\">Read Values</button>\n";
-  out += "<br><br>\n";
-  out += "<button onclick=\"window.location.href='/settings?wb=1\';\">Write Bat V</button>\n";
-  out += "<br><br>\n";
-  out += "<button onclick=\"window.location.href='/settings?wp=1\';\">Write Power</button>\n";
   out += "<br><br>\n";
   out += "<a href='/settings?bat=1'>batmode</a>";
   out += "&nbsp\n";
@@ -224,16 +221,25 @@ void drawGraph()
 void limiter() 
 {
   String out;
-  char temp[40];
+  char temp[100];
 
   DoLimit = true;
   
-  out += "<body><center>";
+  for (uint8_t i = 0; i < server.args(); i++)
+    if (server.argName(i) == "limit") 
+      sd.limit_power=constrain(server.arg(i).toInt(),100,500);
+    
+  out += "<body><center>\n";
             
   out += "<h1>Limiter</h1>";         
   out += "<br>\n";
-
-  out += "Limiter to 80W<br><br>\n"; 
+  
+  out += "<form action=\"/limit\">\n";
+  out += "Power Limiter Watt: ";
+  sprintf(temp,"<input type=\"number\" name=\"limit\" step=\"10\" value=%d>&nbsp\n",sd.limit_power);
+  out += temp;
+  out += "<input type=\"submit\" value=\"Write\"><br>\n";
+  out += "</form>\n";
 
   out += "<a href='/'>Back</a>";
   out += "<br><br>\n";

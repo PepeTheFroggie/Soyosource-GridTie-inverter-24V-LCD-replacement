@@ -18,6 +18,7 @@ struct soyo_esp_data
   byte  startvolt;
   byte  stopvolt;
   int   bat_power;
+  int   limit_power = 100;
   byte  delaysec;
 };
 soyo_esp_data sd;
