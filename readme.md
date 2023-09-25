@@ -35,6 +35,9 @@ Graph screen, red=volt, green=amps, magenta=power:
 
 ![Clipboard01.jpg](Clipboard01.jpg "Hie")
 
+This is the limiter connection pin:
+![IMG_20230925_112643.jpg](IMG_20230925_112643.jpg "Hier")
+
 Good luck. If you find improvements please notify.
 
 Do not use "Bat power" setting for dynamic adjustments, this will fuck up your eeprom. There might be a special message for dynamic power setting but i have not tested that. 
