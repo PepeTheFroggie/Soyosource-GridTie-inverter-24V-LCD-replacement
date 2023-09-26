@@ -153,16 +153,6 @@ void loop()
     msg_esp_soyo(0x12);
     Serial.write(es,6);
   } 
-  else if (DoLimit)
-  {
-    time(&now); // read the current time
-    if (now >= nextlimit)
-    {
-      nextlimit = now + limitinterval; 
-      sendlimit(sd.limit_power);   
-      mySerial.write(lim,8);
-    }
-  }
   else 
   {
     time(&now); // read the current time
@@ -173,6 +163,16 @@ void loop()
       Serial.write(es,6);
     }
   } 
+  if (DoLimit)
+  {
+    time(&now); // read the current time
+    if (now >= nextlimit)
+    {
+      nextlimit = now + limitinterval; 
+      sendlimit(sd.limit_power);   
+      mySerial.write(lim,8);
+    }
+  }
           
   for (int i=0;i<25;i++)  // 500ms
   {

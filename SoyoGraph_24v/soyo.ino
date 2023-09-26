@@ -77,7 +77,7 @@ void copy_msg_soyo_esp()
 byte chksum_se(byte * data)
 {
   byte cs = 0;
-  for (int i=1;i<=13;i++) cs+=data[i];
+  for (int i=1;i<14;i++) cs+=data[i];
   return 0xFF - cs;
 }
 
@@ -97,7 +97,7 @@ byte chksum_se(byte * data)
 byte chksum_es(byte * data)
 {
   byte cs = 0;
-  for (int i=1;i<=4;i++) cs+=data[i];
+  for (int i=1;i<5;i++) cs+=data[i];
   return 0xFF - cs;
 }
 
@@ -165,18 +165,19 @@ void msg_esp_soyo(byte com)
 byte chksum_lim(byte * data)
 {
   byte cs = 0;
-  for (int i=1;i<=7;i++) cs+=data[i];
+  for (int i=1;i<7;i++) cs+=data[i];
   return 0xFF - cs;
 }
 
-void sendlimit(uint16_t pwrval)
+void sendlimit(int pwrval)
 {
+  uint16_t pwr = constrain(pwrval,50,600);
   lim[0] = 36;
   lim[1] = 86;
   lim[2] = 0;
   lim[3] = 33;
-  lim[4] = pwrval>>8;
-  lim[5] = pwrval&0xFF;
+  lim[4] = pwr>>8;
+  lim[5] = pwr&0xFF;
   lim[6] = 128;
   lim[7] = chksum_lim((byte*)&lim);  
 }

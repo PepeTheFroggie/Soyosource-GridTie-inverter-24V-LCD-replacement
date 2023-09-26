@@ -76,8 +76,6 @@ void getData()
   String out;
   char temp[400];
   
-  DoLimit = false;
-
   out = "<html>\
          <head>\
            <meta http-equiv='refresh' content='15'/>\
@@ -222,13 +220,16 @@ void limiter()
 {
   String out;
   char temp[100];
-
-  DoLimit = true;
   
   for (uint8_t i = 0; i < server.args(); i++)
-    if (server.argName(i) == "limit") 
-      sd.limit_power=constrain(server.arg(i).toInt(),100,500);
-    
+  {
+    if (server.argName(i) == "lim") sd.limit_power=server.arg(i).toInt();
+    if (server.argName(i) == "lim50")  sd.limit_power=50;
+    if (server.argName(i) == "lim100") sd.limit_power=100;
+    if (server.argName(i) == "lim150") sd.limit_power=150;
+    if (server.argName(i) == "limon") DoLimit = true;
+    if (server.argName(i) == "limof") DoLimit = false;
+  }  
   out += "<body><center>\n";
             
   out += "<h1>Limiter</h1>";         
@@ -236,10 +237,18 @@ void limiter()
   
   out += "<form action=\"/limit\">\n";
   out += "Power Limiter Watt: ";
-  sprintf(temp,"<input type=\"number\" name=\"limit\" step=\"10\" value=%d>&nbsp\n",sd.limit_power);
+  sprintf(temp,"<input type=\"number\" name=\"lim\" step=\"10\" value=%d>&nbsp\n",sd.limit_power);
   out += temp;
   out += "<input type=\"submit\" value=\"Write\"><br>\n";
   out += "</form>\n";
+
+  out += "<a href='/limit?lim50=1'>limit 50</a>&nbsp\n";
+  out += "<a href='/limit?lim100=1'>limit 100</a>&nbsp\n";
+  out += "<a href='/limit?lim150=1'>limit 150</a><br><br>\n";
+
+  out += "<a href='/limit?limon=1'>limit on</a>&nbsp\n";
+  out += "<a href='/limit?limof=1'>limit off</a><br><br>\n";
+  
 
   out += "<a href='/'>Back</a>";
   out += "<br><br>\n";
